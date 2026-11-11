@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>ViralCut - retour TikTok</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 560px; margin: 4rem auto; padding: 0 1rem; color: #222; }
+  code { background: #f2f2f2; padding: .2rem .4rem; border-radius: 4px; word-break: break-all; }
+  a { color: #fe2c55; }
+</style>
+</head>
+<body>
+<h1>Retour vers ViralCut…</h1>
+<p id="msg">Redirection vers ton ViralCut local.</p>
+<script>
+  // Relais OAuth : TikTok exige une Redirect URI HTTPS fixe.
+  // Cette page renvoie ?code=…&state=… vers l'app qui tourne en local.
+  var LOCAL = 'http://localhost:5173/api/tiktok/callback';
+  var qs = window.location.search;
+  var params = new URLSearchParams(qs);
+  var code = params.get('code');
+  var target = LOCAL + qs;
+  var msg = document.getElementById('msg');
+  if (code || params.get('error')) {
+    msg.innerHTML = 'Si rien ne se passe, <a href="' + target + '">clique ici</a>.' +
+      (code ? '<br><br>Ou colle ce code dans « Connexion manuelle » de ViralCut :<br><code>' + code.replace(/[<>&"]/g, '') + '</code>' : '');
+    window.location.replace(target);
+  } else {
+    msg.textContent = 'Aucun code TikTok reçu. Lance la connexion depuis ViralCut (bouton « Autoriser TikTok »).';
+  }
+</script>
+</body>
+</html>
